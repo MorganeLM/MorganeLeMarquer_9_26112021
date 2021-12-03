@@ -88,26 +88,29 @@ export default class {
   handleEditTicket(e, bill, bills) {
     if (this.counter === undefined || this.id !== bill.id) this.counter = 0
     if (this.id === undefined || this.id !== bill.id) this.id = bill.id
-    if (this.counter % 2 === 0) {
+    if (this.counter % 2 === 0) { // counter is odd number (pair)
       bills.forEach(b => {
         $(`#open-bill${b.id}`).css({ background: '#0D5AE5' })
-      })
-      $(`#open-bill${bill.id}`).css({ background: '#2A2B35' })
-      $('.dashboard-right-container div').html(DashboardFormUI(bill))
-      $('.vertical-navbar').css({ height: '150vh' })
+      }) // display all cards in blue
+      $(`#open-bill${bill.id}`).css({ background: '#2A2B35' }) // display the selected card in black
+      $('.dashboard-right-container div').html(DashboardFormUI(bill)) // display the selected bill detail
+      $('.vertical-navbar').css({ height: '150vh' }) // "correct" a bug of display on vertical nav
       this.counter ++
-    } else {
-      $(`#open-bill${bill.id}`).css({ background: '#0D5AE5' })
+    } else { // counter is even number (impair)
+      $(`#open-bill${bill.id}`).css({ background: '#0D5AE5' }) // display all cards in blue
 
       $('.dashboard-right-container div').html(`
         <div id="big-billed-icon"> ${BigBilledIcon} </div>
-      `)
-      $('.vertical-navbar').css({ height: '120vh' })
+      `) // display big icon (instead of bill details)
+      $('.vertical-navbar').css({ height: '120vh' }) // "reset" vertical nav size
       this.counter ++
     }
     $('#icon-eye-d').click(this.handleClickIconEye)
     $('#btn-accept-bill').click((e) => this.handleAcceptSubmit(e, bill))
     $('#btn-refuse-bill').click((e) => this.handleRefuseSubmit(e, bill))
+
+    console.log('handleEditTicket', this.counter)
+
   }
 
   handleAcceptSubmit = (e, bill) => {
@@ -144,9 +147,14 @@ export default class {
         .html("")
       this.counter ++
     }
+    console.log('handleShowTickets', this.counter)
 
+    // Bug 4: EventListenner is added several times -> target only the concerned section/container
+    // bills.forEach(bill => {
+    //   $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
+    // })
     bills.forEach(bill => {
-      $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
+      $(`#status-bills-container${index} #open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
     })
 
     return bills
