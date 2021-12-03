@@ -108,9 +108,6 @@ export default class {
     $('#icon-eye-d').click(this.handleClickIconEye)
     $('#btn-accept-bill').click((e) => this.handleAcceptSubmit(e, bill))
     $('#btn-refuse-bill').click((e) => this.handleRefuseSubmit(e, bill))
-
-    console.log('handleEditTicket', this.counter)
-
   }
 
   handleAcceptSubmit = (e, bill) => {
@@ -147,7 +144,6 @@ export default class {
         .html("")
       this.counter ++
     }
-    console.log('handleShowTickets', this.counter)
 
     // Bug 4: EventListenner is added several times -> target only the concerned section/container
     // bills.forEach(bill => {
@@ -158,10 +154,10 @@ export default class {
     })
 
     return bills
-
   }
 
   // not need to cover this function by tests
+  /* istanbul ignore next */
   getBillsAllUsers = () => {
     if (this.firestore) {
       return this.firestore
@@ -182,6 +178,7 @@ export default class {
   }
     
   // not need to cover this function by tests
+  /* istanbul ignore next */
   updateBill = (bill) => {
     if (this.firestore) {
     return this.firestore
