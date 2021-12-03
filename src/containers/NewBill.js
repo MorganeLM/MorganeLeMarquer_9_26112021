@@ -19,7 +19,18 @@ export default class NewBill {
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
-    this.firestore
+    
+    // bug 3: file type/extension 
+    // -> add accept attribute to input type file (in NewBillUI)
+    // -> add extension check in js as followed:
+    const fileExtension = file.name.split(".").pop();
+    const extensionAllowed = ['jpg','jpeg','png'];
+
+    if(extensionAllowed.indexOf(fileExtension) !== -1){
+      // hide error if user try several times
+      document.querySelector(".format-error").style.display = "none"
+      // save the file
+      this.firestore
       .storage
       .ref(`justificatifs/${fileName}`)
       .put(file)
@@ -28,6 +39,10 @@ export default class NewBill {
         this.fileUrl = url
         this.fileName = fileName
       })
+    }else{
+      console.log('Format file error: not an image (.jpg, .jpeg and .png accepted')
+      document.querySelector(".format-error").style.display = "block"
+    }
   }
   handleSubmit = e => {
     e.preventDefault()
